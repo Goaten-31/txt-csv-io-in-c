@@ -1,6 +1,9 @@
 # This project was made not to solve a problem but to help my understanding of C; understanding Structs: user input, printing struct content into files... and git and Github
 
-# Concepts learnt: Structs, malloc, basic security/vulnerabilities (Excel command injections)
+# Concepts learnt: 
+- Structs
+- malloc
+- basic security/vulnerabilities (Excel command injections)
 
 # Stack: 
 - Clion as an ide, preffered choice for multiple reasons (refactor tools, debbuging, ready boilerplate, abstracted git commands)
