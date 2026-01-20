@@ -3,99 +3,145 @@
 #include <string.h>
 #include "extrns.h"
 
-// struct contained within the header file "extrns.h" line : 4
+/* struct contained within the header file "extrns.h" line : 4
+   externs also contains the functions: saveCSV, searchCSV, filterCSV, makeTxt, and getuserchoice */
 struct Contacts;
 
 int main() {
+
+    // prompting the user to choose their desired action
+
     printf("1. Write\n");
     printf("2. Search\n");
     printf("3. Filter\n");
     printf("4. Exit\n");
     printf("Enter choice: ");
 
-    int stchoice = 0;
-    char schoice = 0;
+    // setting variables:
 
+    /*
+    first, variables that will hold the numbers representing
+    the choices of the user
+    */
+
+    int STchoice = 0;
+    char SNchoice = 0;
     int filterage = 0;
+
+    /*
+    then buffers to hold the numeric values as chars that will then
+    be turned into ints to be processed in a switch statement
+    */
 
     char buf[8];
     char buf2[8];
 
+    // meant to hold the name the user inputs when they chose "2. Search"
+
     char searchName[64];
 
-    fgets(buf, sizeof(buf), stdin);
-    stchoice = atoi(buf);
+    // getuserchoice found in "extrns.h" line : 159
+    STchoice = getuserchoice(&buf[8]);
 
     do {
-        if (stchoice == 1) {
-            printf("1.CSV 2.txt ");
+        switch (STchoice) {
+            case 1: {
+                //prompt user to choose the type of file
+                printf("1.CSV\n2.txt\n ");
 
-            fgets(buf2, sizeof(buf2), stdin);
-            schoice = atoi(buf2);
+                SNchoice = getuserchoice(&buf2[8]);
 
-            switch (schoice) {
-                case 1:
+                switch (SNchoice) {
+                    case 1:
+                        /*
+                            allocating memory for the struct
+                            then asking the user for the info they want to enter
+                            saveCSV is found in "extrns.h" line : 27
+                        */
+                        struct Contacts *ptrCSV = malloc(sizeof(struct Contacts));
+                        if (ptrCSV == NULL) return 1;
+                        memset(ptrCSV, 0, sizeof(*ptrCSV));
 
-                    struct Contacts *ptr = malloc(sizeof(struct Contacts));
-                    if (ptr == NULL) return 1;
-                    memset(ptr, 0, sizeof(*ptr));
+                        printf("Enter name: ");
+                        fgets(ptrCSV -> Name, sizeof(ptrCSV -> Name), stdin);
+                        ptrCSV->Name[strcspn(ptrCSV -> Name, "\n")] = '\0';
 
-                    printf("Enter name: ");
-                    fgets(ptr -> Name, sizeof(ptr -> Name), stdin);
-                    ptr->Name[strcspn(ptr -> Name, "\n")] = '\0';
+                        printf("Enter age: ");
+                        fgets(buf, sizeof(buf), stdin);
+                        ptrCSV -> Age = atoi(buf);
 
-                    printf("Enter age: ");
-                    fgets(buf, sizeof(buf), stdin);
-                    ptr -> Age = atoi(buf);
+                        printf("Enter email: ");
+                        fgets(ptrCSV -> Email, sizeof(ptrCSV -> Email), stdin);
+                        ptrCSV -> Email[strcspn(ptrCSV -> Email, "\n")] = '\0';
 
-                    printf("Enter email: ");
-                    fgets(ptr -> Email, sizeof(ptr -> Email), stdin);
-                    ptr -> Email[strcspn(ptr -> Email, "\n")] = '\0';
+                        saveCSV(ptrCSV);
+                        free(ptrCSV);
+                        break;
 
-                    saveCSV(ptr);
-                    free(ptr);
-                    break;
+                    case 2:
 
-                case 2:
+                        /* allocating memory for and printing contents into the .txt file
+                         * makeTxt found in "extrns.h" line : 129
+                         */
 
-                    char *ptr1 = malloc(1024);
-                    if (ptr1 == NULL) return 1;
+                        char *ptrTxt = malloc(1024);
+                        if (ptrTxt == NULL) return 1;
 
-                    printf("Enter .txt file content:\n");
+                        printf("Enter .txt file content:\n");
 
-                    if (fgets(ptr1, 1024, stdin)) {
-                        ptr1[strcspn(ptr1, "\n")] = '\0';
-                        makeTxt(ptr1);
-                    }
+                        if (fgets(ptrTxt, 1024, stdin)) {
+                            ptrTxt[strcspn(ptrTxt, "\n")] = '\0';
+                            makeTxt(ptrTxt);
+                        }
 
-                    free(ptr1);
-                    break;
+                        free(ptrTxt);
+                        break;
 
-                default:
-                    printf("Invalid Input\n");
-            }
-            break;
-        } if (stchoice == 2) {
+                    default:
+                        printf("Invalid Input\n");
+                        break;
+
+                }
+                break;
+
+            } case 2: {
+
+                /* prompting user to enter in the name they want to search for
+                 * searchCSV is found in "extrns.h" line: 58
+                 */
 
                 printf("Enter name: ");
                 fgets(searchName, sizeof(searchName), stdin);
                 searchName[strcspn(searchName, "\n")] = '\0';
-                search(searchName);
+                searchCSV(searchName);
                 break;
-            } if (stchoice == 3) {
+
+            } case 3: {
+                // clearing buffer
                 memset(buf, 0, sizeof(buf));
+
+                /* prompting user to enter the age they want to filter by
+                 * filterCSV found in "extrns.h" line : 94
+                 */
                 printf("Enter age: ");
+                filterage = getuserchoice(&buf[8]);
 
-                fgets(buf, sizeof(buf), stdin);
-                filterage = atoi(buf);
-
-                filter(&filterage);
+                filterCSV(&filterage);
+                break;
             }
 
-        if (stchoice == 4) {
-            printf("Exiting...\n");
+            case 4: {
+                    printf("Exiting...\n");
+                    break;
+                }
+
+            default:
+                printf("Invalid Input\n");
+                break;
+
         }
-    } while (stchoice != 4);
+
+    }   while (STchoice != 4);
 
     return 0;
 }

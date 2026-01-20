@@ -7,7 +7,13 @@ struct Contacts {
     char Email[64];
 };
 
-void fprintf_safe(FILE *fp, const char *str, int last) {
+/*
+ * fprintfsafe was written to avoid any command injections, it's an "implicit" function
+ * in the sense that it is only used within the header file, specifically for "saveCSV"
+ */
+
+void fprintfsafe(FILE *fp, const char *str, int last) {
+
     if (str == NULL) {
         fprintf(fp, ",");
         return;
@@ -27,43 +33,49 @@ void fprintf_safe(FILE *fp, const char *str, int last) {
 void saveCSV(struct Contacts *c) {
     if (c == NULL) return;
 
-    // Setting up file path
+    // generating the file path
     char path[256];
     char *user = getenv("USERPROFILE");
     if (user == NULL) return;
     snprintf(path, sizeof(path), "%s\\Desktop\\contacts.csv", user);
 
+    // opening file in append+ mode
     FILE *fp = fopen(path, "a+");
     if (fp == NULL) {
         perror("Save Error");
     }
 
+    // checking if the file is empty, if so print the header
     fseek(fp, 0, SEEK_END);
     if (ftell(fp) == 0) {
         fprintf(fp, "Name,Age,Email\n");
     }
 
-    fprintf(fp, "\"");
-    fprintf_safe(fp, c->Name, 0);
+    // printing contents into the file
 
+    fprintf(fp, "\"");
+    fprintfsafe(fp, c->Name, 0);
+
+    // fprintf used since numbers are generally safe
     fprintf(fp,"%d", c->Age);
 
     fprintf(fp, "\"");
-    fprintf_safe(fp, c->Email, 1);
+    fprintfsafe(fp, c->Email, 1);
 
     fclose(fp);
-    printf("Contact saved locally.\n");
+    printf("Contact saved successfully.\n");
 }
 
-void search(const char *targetName) {
-    // Generating file path
+void searchCSV(const char *targetName) {
+
+    // generating file path
     char path[256];
     char *user = getenv("USERPROFILE");
     if (user != NULL) {
         snprintf(path, sizeof(path), "%s\\Desktop\\contacts.csv", user);
     }
 
-    // Opening the file in "read" mode
+    // opening the file in "read" mode
     FILE *fp = fopen(path, "r");
     if (fp == NULL) {
         perror("Failed to open file in read mode.");
@@ -91,7 +103,10 @@ void search(const char *targetName) {
     fclose(fp);
 }
 
-void filter(const int *filterAge) {
+void filterCSV(const int *filterAge) {
+
+    // generating the file path
+
     if (filterAge == NULL) return;
 
     char path[256];
@@ -99,6 +114,8 @@ void filter(const int *filterAge) {
     if (user != NULL) {
         snprintf(path, sizeof(path), "%s\\Desktop\\contacts.csv", user);
     }
+
+    // opening the file in read mode
 
     FILE *fp = fopen(path, "r");
     if (fp == NULL) {
@@ -108,6 +125,8 @@ void filter(const int *filterAge) {
 
     char line[256];
     fgets(line, sizeof(line), fp);
+
+    // loop that does the actual filtering
 
     while (fgets(line, sizeof(line), fp)) {
         char *nametoken = strtok(line, ",");
@@ -127,6 +146,8 @@ void filter(const int *filterAge) {
 }
 
 void makeTxt(const char *content) {
+
+    // generating file path
     if (content == NULL) return;
 
     char path[256];
@@ -135,6 +156,8 @@ void makeTxt(const char *content) {
         user = getenv("HOME");
     }
 
+    // handling the case for when the desired file isn't found
+
     if (user == NULL) {
         printf("Error: Could not find user directory.\n");
         return;
@@ -142,6 +165,7 @@ void makeTxt(const char *content) {
 
     snprintf(path, sizeof(path), "%s\\Desktop\\testingClion.txt", user);
 
+    // opening the file in write mode
     FILE *fp = fopen(path, "w");
     if (fp == NULL) {
         perror("Failed to open file");
@@ -155,4 +179,10 @@ void makeTxt(const char *content) {
 
     printf("File saved successfully to: %s\n", path);
 }
+
+int getuserchoice(char *buf) {
+    fgets(buf, sizeof(buf), stdin);
+    return atoi(buf);
+}
+
 #endif //NEW_EXTRNS_H
