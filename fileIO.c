@@ -25,7 +25,7 @@ int main() {
     */
 
     int STchoice = 0;
-    char SNchoice = 0;
+    int SNchoice = 0;
     int filterage = 0;
 
     /*
@@ -35,6 +35,7 @@ int main() {
 
     char buf[8];
     char buf2[8];
+    char agebuf[8];
 
     // meant to hold the name the user inputs when they chose "2. Search"
 
@@ -48,7 +49,6 @@ int main() {
             case 1: {
                 //prompt user to choose the type of file
                 printf("1.CSV\n2.txt\n ");
-
                 SNchoice = getuserchoice(&buf2[8]);
 
                 switch (SNchoice) {
@@ -66,9 +66,10 @@ int main() {
                         fgets(ptrCSV -> Name, sizeof(ptrCSV -> Name), stdin);
                         ptrCSV->Name[strcspn(ptrCSV -> Name, "\n")] = '\0';
 
+                        memset(agebuf, 0, sizeof(agebuf));
                         printf("Enter age: ");
-                        fgets(buf, sizeof(buf), stdin);
-                        ptrCSV -> Age = atoi(buf);
+                        fgets(agebuf, sizeof(agebuf), stdin);
+                        ptrCSV -> Age = atoi(agebuf);
 
                         printf("Enter email: ");
                         fgets(ptrCSV -> Email, sizeof(ptrCSV -> Email), stdin);
@@ -87,7 +88,7 @@ int main() {
                         char *ptrTxt = malloc(1024);
                         if (ptrTxt == NULL) return 1;
 
-                        printf("Enter .txt file content:\n");
+                        printf("Enter .txt file content: (max 1024 chars)\n");
 
                         if (fgets(ptrTxt, 1024, stdin)) {
                             ptrTxt[strcspn(ptrTxt, "\n")] = '\0';
@@ -118,7 +119,7 @@ int main() {
 
             } case 3: {
                 // clearing buffer
-                memset(buf, 0, sizeof(buf));
+                memset(agebuf, 0, sizeof(agebuf));
 
                 /* prompting user to enter the age they want to filter by
                  * filterCSV found in "extrns.h" line : 94

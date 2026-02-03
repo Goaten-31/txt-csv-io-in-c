@@ -57,7 +57,7 @@ void saveCSV(struct Contacts *c) {
     fprintfsafe(fp, c->Name, 0);
 
     // fprintf used since numbers are generally safe
-    fprintf(fp,"%d", c->Age);
+    fprintf(fp,"%d,", c->Age);
 
     fprintf(fp, "\"");
     fprintfsafe(fp, c->Email, 1);
