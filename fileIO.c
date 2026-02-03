@@ -58,6 +58,7 @@ int main() {
                             then asking the user for the info they want to enter
                             saveCSV is found in "extrns.h" line : 27
                         */
+
                         struct Contacts *ptrCSV = malloc(sizeof(struct Contacts));
                         if (ptrCSV == NULL) return 1;
                         memset(ptrCSV, 0, sizeof(*ptrCSV));
