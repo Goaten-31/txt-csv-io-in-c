@@ -44,7 +44,7 @@ int main() {
     // getuserchoice found in "extrns.h" line : 159
     STchoice = getuserchoice(&buf[8]);
 
-    do {
+    while (STchoice != 4) {
         switch (STchoice) {
             case 1: {
                 //prompt user to choose the type of file
@@ -104,7 +104,7 @@ int main() {
                         break;
 
                 }
-                break;
+                STchoice = 4;
 
             } case 2: {
 
@@ -116,7 +116,7 @@ int main() {
                 fgets(searchName, sizeof(searchName), stdin);
                 searchName[strcspn(searchName, "\n")] = '\0';
                 searchCSV(searchName);
-                break;
+                STchoice = 4;
 
             } case 3: {
                 // clearing buffer
@@ -129,13 +129,8 @@ int main() {
                 filterage = getuserchoice(&buf[8]);
 
                 filterCSV(&filterage);
-                break;
+                STchoice = 4;
             }
-
-            case 4: {
-                    printf("Exiting...\n");
-                    break;
-                }
 
             default:
                 printf("Invalid Input\n");
@@ -143,7 +138,8 @@ int main() {
 
         }
 
-    }   while (STchoice != 4);
+    }
+    printf("Exiting Program.\n");
 
     return 0;
 }
