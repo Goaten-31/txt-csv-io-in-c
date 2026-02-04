@@ -91,6 +91,10 @@ void searchCSV(const char *targetName) {
     int found = 0;
     while (fgets(line, sizeof(line), fp)) {
         char *nameInFile = strtok(line, ",");
+        int len = strlen(nameInFile);
+        for (int i = 0; i < len; i++) {
+            nameInFile[i] = nameInFile[i + 1];
+        }
         if (nameInFile != NULL && strcmp(nameInFile, targetName) == 0) {
             found = 1;
             char *age = strtok(nullptr, ",");
@@ -128,7 +132,8 @@ void filterCSV(const int *filterAge) {
     fgets(line, sizeof(line), fp);
 
     // loop that does the actual filtering
-
+    int counter = 0;
+    printf("Found Contacts:\n");
     while (fgets(line, sizeof(line), fp)) {
         char *nametoken = strtok(line, ",");
         char *ageToken = strtok(nullptr, ",");
@@ -139,12 +144,19 @@ void filterCSV(const int *filterAge) {
         if (ageToken != NULL) {
             if (ageInFile > *filterAge) {
                 if (emailToken) emailToken[strcspn(emailToken, "\n")] = '\0';
-                printf("Found Contact:\n Name:%s\n Age:%s\n Email:%s", nametoken, ageToken, emailToken);
+                printf("Name:%s\n Age:%s\n Email:%s\n", nametoken, ageToken, emailToken);
+                printf("\n");
+                counter ++;
             }
         }
     }
+    if (counter == 0) {
+        printf("Just kidding nothing to see here ;p.\n");
+    }
 
 }
+
+    // Hey you cared enough to read through all this so thank you :D
 
 void makeTxt(const char *content) {
 

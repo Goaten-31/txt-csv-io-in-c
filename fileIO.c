@@ -78,6 +78,8 @@ int main() {
 
                         saveCSV(ptrCSV);
                         free(ptrCSV);
+                        STchoice = 4;
+                        SNchoice = 3;
                         break;
 
                     case 2:
@@ -99,12 +101,17 @@ int main() {
                         free(ptrTxt);
                         break;
 
+                    case 3:
+                        printf("Exiting Program");
+                        break;
+
                     default:
                         printf("Invalid Input\n");
                         break;
 
                 }
                 STchoice = 4;
+                break;
 
             } case 2: {
 
@@ -118,7 +125,9 @@ int main() {
                 searchCSV(searchName);
                 STchoice = 4;
 
-            } case 3: {
+
+            } break;
+                case 3: {
                 // clearing buffer
                 memset(agebuf, 0, sizeof(agebuf));
 
@@ -130,13 +139,14 @@ int main() {
 
                 filterCSV(&filterage);
                 STchoice = 4;
+
             }
+                break;
 
             default:
                 printf("Invalid Input\n");
-                break;
-
         }
+        break;
 
     }
     printf("Exiting Program.\n");
