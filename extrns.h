@@ -8,8 +8,8 @@ struct Contacts {
 };
 
 /*
- * fprintfsafe was written to avoid any command injections, it's an "implicit" function
- * in the sense that it is only used within the header file, specifically for "saveCSV"
+ * fprintfsafe was written to avoid any command injections
+ * while removechar was written so that the output of searchCSV looks clean
  */
 
 void fprintfsafe(FILE *fp, const char *str, int last) {
@@ -28,6 +28,18 @@ void fprintfsafe(FILE *fp, const char *str, int last) {
     }
 
     fprintf(fp, last ? "\n" : ",");
+}
+
+void removechar(char *str, int index) {
+    int len = strlen(str);
+
+    if (index < 0 || index >= len) {
+        return;
+    }
+
+    for (int i = index; i < len; i++) {
+        str[i] = str[i + 1];
+    }
 }
 
 void saveCSV(struct Contacts *c) {
@@ -91,17 +103,15 @@ void searchCSV(const char *targetName) {
     int found = 0;
     while (fgets(line, sizeof(line), fp)) {
         char *nameInFile = strtok(line, ",");
-        int len = strlen(nameInFile);
-        for (int i = 0; i < len; i++) {
-            nameInFile[i] = nameInFile[i + 1];
-        }
+        removechar(nameInFile, 0);
         if (nameInFile != NULL && strcmp(nameInFile, targetName) == 0) {
             found = 1;
             char *age = strtok(nullptr, ",");
             char *email = strtok(nullptr, ",");
 
             if (email) email[strcspn(email, "\n")] = '\0';
-            printf("Found Contact:\n Name:%s\n Age:%s\n Email:%s", nameInFile, age, email);
+            removechar(email, 0);
+            printf("Contact Found:\n Name:%s\n Age:%s\n Email:%s\n", nameInFile, age, email);
         }
     }
     if (!found) printf("Contact not found.\n");
