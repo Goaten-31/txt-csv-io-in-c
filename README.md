@@ -8,7 +8,7 @@
 # Stack: 
 - Clion as an ide, preferred choice for multiple reasons (refactor tools, debugging, ready boilerplate, abstracted git commands)
 - git for version control
-- C
+- C23
 
 # Key features:
 - To help keep the main code clean, I used the "test.c" file to test features and snippets of code
