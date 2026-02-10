@@ -57,7 +57,6 @@ void saveCSV(struct Contacts *c) {
         perror("Save Error");
     }
 
-
     // checking if the file is empty, if so print the header
     fseek(fp, 0, SEEK_END);
     if (ftell(fp) == 0) {
@@ -189,7 +188,7 @@ void makeTxt(const char *content) {
     snprintf(path, sizeof(path), "%s\\Desktop\\testingClion.txt", user);
 
     // opening the file in write mode
-    FILE *fp = fopen(path, "w");
+    FILE *fp = fopen(path, "a+");
     if (fp == NULL) {
         perror("Failed to open file");
         return;

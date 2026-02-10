@@ -1,10 +1,10 @@
-# This project was made not to solve a problem but to help my understanding of C; understanding Structs: user input, printing struct content into files... and git and Github
+# Project to help with my understanding of C
 
 # Concepts learnt: 
 - Structs
-- dynamic memory allocation
-- basic security/vulnerabilities (Excel command injections)
-- header files
+- Dynamic memory allocation (malloc)
+- Basic security/vulnerabilities (Excel command injections)
+- Header files
 # Stack: 
 - Clion as an ide, preferred choice for multiple reasons (refactor tools, debugging, ready boilerplate, abstracted git commands)
 - git for version control
@@ -13,6 +13,7 @@
 # Key features:
 - To help keep the main code clean, I used the "test.c" file to test features and snippets of code
 And making the "extrens.h" to hold the struct and functions as they became very complex and long
+- Quick and memory efficient file manipulation
 
 # Points of improvement:
 - Adding a feature where the user can name the file as they please
